@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<beans:description><![CDATA[
+       User Context  
+	]]></beans:description>
+	
+	<beans:bean id="userIdCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean" p:cacheName="userIdCache"  p:maxElementsInMemory="5000" p:diskPersistent="false"  p:overflowToDisk="false" p:timeToIdle="1800"   p:timeToLive="3600"  p:eternal="false"  p:diskExpiryThreadIntervalSeconds="0" p:statisticsEnabled="true"  />
+	
+	<beans:bean id="userCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean" p:cacheName="userCache"  p:maxElementsInMemory="5000"  p:diskPersistent="false" p:overflowToDisk="false"  p:timeToIdle="1800"   p:timeToLive="3600" p:eternal="false"  p:diskExpiryThreadIntervalSeconds="0"  p:statisticsEnabled="true" />
+	
+	<beans:bean id="userDao" class="architecture.community.user.dao.JdbcUserDao" p:dataSource-ref="dataSource" />
+    
+    <beans:bean id="roleDao" class="architecture.community.user.dao.JdbcRoleDao" p:dataSource-ref="dataSource" />
+	
+	<beans:bean id="rememberMeDao" class="architecture.community.security.spring.rememberme.dao.JdbcTokenRepositoryDao" p:dataSource-ref="dataSource" />
+	
+	<beans:bean id="userManager" class="architecture.community.user.CommunityUserManager"  />		
+	
+	<beans:bean id="roleManager" class="architecture.community.user.CommunityRoleManager"  />			    
+    
+</beans:beans> 

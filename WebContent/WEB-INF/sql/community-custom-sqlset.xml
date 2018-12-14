@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlset>
+	<name>COMMUNITY_CUSTOM</name>
+	<description>COMMUNITY CUSTOM SUBSYSTEM QUERIES</description>	
+	
+	<sql-query name="SELECT_OPEN_ISSUE_BY_REQUEST" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+	* 
+	FROM REP_ISSUE 
+	WHERE 
+	OBJECT_TYPE = 19
+	AND ISSUE_STATUS <> '005' 
+	]]><dynamic><![CDATA[
+	<#if filter??>
+	<#if filter.logic??>${filter.logic} </#if>
+	<#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+	</#list></#if> 
+ 	<#if sort??  && ( sort?size > 0 ) > ORDER BY <#list sort as item > ${item.field} ${item.dir} </#list><#else>
+ 	ORDER BY ASSIGNEE, DUE_DATE	
+ 	</#if>	
+	]]></dynamic><![CDATA[	
+	
+ 	]]></sql-query> 
+ 	
+	<sql-query name="SELECT_ISSUE_STATS_BY_MONTHLY" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+		MONTH,
+		ISSUE_TYPE,
+		COUNT (ISSUE_TYPE) AS CNT
+	FROM (
+		SELECT
+		T1.ISSUE_STATUS,
+		T1.ISSUE_TYPE, 
+	]]><dynamic><![CDATA[
+	<#if data.complete?? && data.complete == true >
+		TO_CHAR( NVL( T1.RESOLUTION_DATE, T1.MODIFIED_DATE ) ,'YYYY.MM') AS MONTH
+	<#else>
+		TO_CHAR( NVL( T1.DUE_DATE, T1.CREATION_DATE ) ,'YYYY.MM') AS MONTH 
+	</#if>		
+		FROM REP_ISSUE T1
+		WHERE T1.ISSUE_STATUS IS NOT NULL
+	<#if data.complete?? && data.complete == true >
+		AND T1.ISSUE_STATUS = '005'
+	</#if>
+	<#if filter??>
+	<#if filter.logic??>${filter.logic} </#if>
+	<#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+	</#list></#if>
+	]]></dynamic><![CDATA[	
+	) G1
+	GROUP BY MONTH , ISSUE_TYPE
+	ORDER BY MONTH
+ 	]]></sql-query>
+ 	
+ 	
+	<sql-query name="SELECT_ISSUE_STATS_BY_PROJECT" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+      T2.PROJECT_ID AS PROJECT_ID, 
+      T2.NAME,
+      T1.ISSUE_TYPE , 
+      COUNT( T1.ISSUE_TYPE) AS CNT, 
+      T1.ISSUE_STATUS 
+    FROM REP_ISSUE T1 , REP_PROJECT T2
+    WHERE T1.ASSIGNEE > 0 
+    AND T1.OBJECT_ID = T2.PROJECT_ID
+	]]><dynamic><![CDATA[
+	<#if data.complete?? && data.complete == true >
+	AND T1.ISSUE_STATUS = '005'
+	</#if>
+	<#if filter??><#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+	</#list></#if>
+	GROUP BY T2.PROJECT_ID , T2.NAME, T1.ISSUE_TYPE, T1.ISSUE_STATUS	
+	ORDER BY T2.PROJECT_ID , T1.ISSUE_TYPE
+ 	]]></dynamic></sql-query>
+ 		
+	<sql-query name="SELECT_ISSUE_STATS_BY_ASSIGNEE" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+      T1.ASSIGNEE AS USER_ID, 
+      T1.ISSUE_TYPE , 
+      COUNT( T1.ISSUE_TYPE) AS CNT, 
+      T1.ISSUE_STATUS 
+    FROM REP_ISSUE T1 , REP_USER T2
+    WHERE T1.ASSIGNEE > 0 
+    AND T1.ASSIGNEE = T2.USER_ID
+	]]><dynamic><![CDATA[
+	<#if filter??><#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+	</#list></#if>
+	GROUP BY T1.ASSIGNEE , T2.NAME, T1.ISSUE_TYPE, T1.ISSUE_STATUS	
+	ORDER BY T1.ASSIGNEE , T1.ISSUE_TYPE
+ 	]]></dynamic></sql-query>
+ 	
+	<sql-query name="SELECT_ISSUE_STATS_BY_ASSIGNEE_MONTHLY" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+		MONTH,
+		ISSUE_TYPE,
+		COUNT (ISSUE_TYPE) AS CNT
+	FROM 
+	(
+	SELECT
+	T1.ASSIGNEE AS USER_ID,
+	T1.ISSUE_STATUS,
+	T1.ISSUE_TYPE, 
+	]]><dynamic><![CDATA[
+	<#if data.complete?? && data.complete == true >
+		TO_CHAR( NVL( T1.RESOLUTION_DATE, T1.MODIFIED_DATE ) ,'YYYY.MM') AS MONTH
+	<#else>
+		TO_CHAR( NVL( T1.DUE_DATE, T1.CREATION_DATE ) ,'YYYY.MM') AS MONTH 
+	</#if>
+	FROM REP_ISSUE T1
+	WHERE T1.ASSIGNEE > 0 	
+	<#if data.complete?? && data.complete == true >
+	AND T1.ISSUE_STATUS = '005'
+	</#if>
+	<#if filter??><#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+	</#list></#if>
+	]]></dynamic><![CDATA[	
+	) G1
+	GROUP BY MONTH , ISSUE_TYPE
+	ORDER BY MONTH
+ 	]]></sql-query>
+ 			
+ 	<sql-query name="SELECT_ISSUE_BY_PORJECT" description="SELECT_ISSUE_BY_PORJECT"><![CDATA[    	
+  	SELECT 
+	  OBJECT_TYPE,
+	  OBJECT_ID,
+	  ISSUE_ID,
+	  ISSUE_TYPE,
+	  (SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'ISSUE_TYPE' AND CODE = ISSUE_TYPE ) ISSUE_TYPE_NAME,
+	  ISSUE_KEY,
+	  ISSUE_STATUS,
+	  (SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'ISSUE_STATUS' AND CODE = ISSUE_STATUS ) ISSUE_STATUS_NAME,
+	  RESOLUTION,
+	  (SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'RESOLUTION' AND CODE = RESOLUTION ) RESOLUTION_NAME,
+	  PRIORITY,
+	  (SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'PRIORITY' AND CODE = PRIORITY ) PRIORITY_NAME,
+	  COMPONENT,
+	  ASSIGNEE,
+	  REPOTER,
+	  SUMMARY,
+	  DESCRIPTION,
+	  DUE_DATE,
+	  RESOLUTION_DATE,
+	  CREATION_DATE,
+	  MODIFIED_DATE,
+	  CREATOR,
+	  TIMEORIGINALESTIMATE,
+	  TIMESPENT,
+	  TIMEESTIMATE,
+	  REQUESTOR_NAME
+	FROM REP_ISSUE    
+ 	]]><dynamic><![CDATA[   
+ 	WHERE OBJECT_TYPE = 19
+ 	<#if data.objectId??>
+ 	AND OBJECT_ID = ${data.objectId}
+ 	</#if>
+ 	<#if filter??><#list filter.filters as item ><#if item.field == "START_DATE">
+ 	${item.logic} ( CREATION_DATE >= '${item.value}' OR DUE_DATE >= '${item.value}' )
+ 	<#elseif item.field == "END_DATE">
+ 	${item.logic} ( ( DUE_DATE is null AND CREATION_DATE <= '${item.value}' ) OR ( DUE_DATE <= '${item.value}' ) )
+ 	<#else>
+ 	${item.logic} ${item.field}<#if item.operator == "eq" ><#if item.value??>=<#else> IS NULL</#if><#elseif item.operator == "contains" && item.value?? > LIKE '%${item.value}%'<#elseif item.operator == "neq"><#if item.value??>!=<#else> IS NOT NULL</#if><#elseif item.operator == "gte">>=<#elseif item.operator == 'lte'><=</#if><#if item.value?? && item.operator != "contains" >'${item.value}'</#if>
+ 	</#if></#list></#if>
+ 	<#if sort??  && ( sort?size > 0 ) > ORDER BY <#list sort as item > ${item.field} ${item.dir} </#list><#else>
+ 	ORDER BY MODIFIED_DATE DESC
+ 	</#if>
+ 	 ]]></dynamic></sql-query>	
+ 	 
+	<sql-query name="SELECT_ISSUE_STATS_BY_YEAR" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[   
+	SELECT 
+		T1.ISSUE_TYPE,
+		T1.ISSUE_STATUS,
+		TO_CHAR( T1.DUE_DATE , 'MM' ) AS DUE_MONTH,
+		TO_CHAR( T1.CREATION_DATE , 'MM' ) AS CREATION_MONTH,
+		TO_CHAR( T1.RESOLUTION_DATE , 'MM' ) AS RESOLUTION_MONTH
+	FROM 
+		REP_ISSUE T1, REP_PROJECT T2
+	WHERE 
+		( TO_CHAR(SYSDATE, 'YYYY') = TO_CHAR(T1.CREATION_DATE, 'YYYY') OR TO_CHAR(SYSDATE, 'YYYY') = TO_CHAR(T1.RESOLUTION_DATE, 'YYYY') )
+	]]><dynamic><![CDATA[  	
+		AND T1.OBJECT_TYPE = 19
+		AND T1.OBJECT_ID = T2.PROJECT_ID 
+		<#if filter??><#if filter.logic??>${filter.logic}</#if><#list filter.filters as item >
+		<#if item.logic??>${item.logic}</#if><#if item.operator == "doesnotcontain" > ${item.field} NOT IN ( ${item.value} )<#elseif item.operator == "eq" > ${item.field} = ${item.value}</#if>
+		</#list></#if>
+	--	AND T2.PROJECT_ID NOT IN (28)
+	<#if data.contractor?? >
+		AND T2.CONTRACTOR =  '${data.contractor}'
+	</#if> 		
+ 	]]></dynamic></sql-query>
+ 	
+ 	<sql-query name="SELECT_ISSUE_SUMMARY_BY_PERIOD" description="특정 기간 동안 이슈 요약 정보 조회"><![CDATA[    	
+	SELECT  
+		T2.PROJECT_ID, 
+		T2.NAME AS PROJECT_NAME ,
+		T1.ISSUE_ID, 
+		T1.SUMMARY AS ISSUE_SUMMARY,
+		T1.ISSUE_TYPE,
+		( SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'ISSUE_TYPE' AND CODE = T1.ISSUE_TYPE ) AS ISSUE_TYPE_NAME,
+		T1.PRIORITY AS ISSUE_PRIORITY,
+		T1.RESOLUTION AS ISSUE_RESOLUTION,
+		( SELECT NAME FROM REP_CODESET WHERE GROUP_CODE = 'RESOLUTION' AND CODE = T1.RESOLUTION ) AS RESOLUTION_NAME,
+		T1.ISSUE_STATUS, 
+		T1.REPOTER,
+		T1.ASSIGNEE,
+		T1.DUE_DATE,
+		T1.RESOLUTION_DATE,
+		T1.CREATION_DATE,
+		T1.MODIFIED_DATE
+	FROM REP_ISSUE T1 , REP_PROJECT T2
+	]]><dynamic><![CDATA[    
+	WHERE 
+	T1.OBJECT_TYPE = 19
+	AND T1.OBJECT_ID = T2.PROJECT_ID 	
+	AND T2.CONTRACT_STATE NOT IN ( '004' )
+	<#if data.projectIds?? >
+	AND T2.PROJECT_ID NOT IN (
+	<#list data.projectIds as item >
+	${item.projectId}<#if !item?is_last>,</#if>
+	</#list>
+	) 
+	</#if>
+	<#if filter?? > 
+	<#list filter.filters as item >
+	<#if item.logic??>${item.logic}</#if> ${item.field} 
+	<#if item.value?? >
+	<#if item.operator == "startswith" && item.value?? > LIKE '${item.value}%'
+	<#elseif item.operator == "eq" > = '${item.value}'
+	<#elseif item.operator == "neq"> != '${item.value}'
+	<#elseif item.operator == "gte"> >= ${item.value}
+	<#elseif item.operator == 'lte'> <= ${item.value}</#if>
+	<#else>
+	<#if item.operator == "eq" > IS NULL <#elseif item.operator == "neq"> IS NOT NULL </#if>
+	</#if>
+ 	</#list></#if>	 
+	AND (
+	      ( T1.DUE_DATE IS NULL AND TO_CHAR( T1.CREATION_DATE , 'YYYYMMDD' ) BETWEEN '${data.startDate}' AND '${data.endDate}' )  
+	   OR ( T1.DUE_DATE IS NOT NULL AND TO_CHAR( T1.DUE_DATE , 'YYYYMMDD' ) BETWEEN '${data.startDate}' AND '${data.endDate}' ) 
+	   OR ( T1.RESOLUTION_DATE IS NOT NULL AND TO_CHAR( T1.RESOLUTION_DATE , 'YYYYMMDD' ) BETWEEN '${data.startDate}' AND '${data.endDate}' ) 
+	)
+ 	 ]]></dynamic></sql-query>
+ 	 	
+	<sql-query name="SELECT_ISSUE_REMAILS_BY_DATE" description="특정 일자 이전까지 미처리 건수 조회"><![CDATA[
+	SELECT  
+		T2.PROJECT_ID,
+      	T2.NAME AS PROJECT_NAME ,
+      	count( T1.ISSUE_ID ) as CNT
+	FROM REP_ISSUE T1 , REP_PROJECT T2
+	]]><dynamic><![CDATA[    
+	WHERE 
+		T1.OBJECT_TYPE = 19
+		AND T1.OBJECT_ID = T2.PROJECT_ID
+		AND T2.CONTRACT_STATE NOT IN ( '004' )
+		<#if data.projectIds?? >
+		AND T2.PROJECT_ID NOT IN (
+		<#list data.projectIds as item >
+		${item.projectId}<#if !item?is_last>,</#if>
+		</#list>
+		)</#if>	 
+		<#if filter?? > 
+		<#list filter.filters as item >
+		<#if item.logic??>${item.logic}</#if> ${item.field} 
+		<#if item.value?? >
+		<#if item.operator == "startswith" && item.value?? > LIKE '${item.value}%'
+		<#elseif item.operator == "eq" > = '${item.value}'
+		<#elseif item.operator == "neq"> != '${item.value}'
+		<#elseif item.operator == "gte"> >= ${item.value}
+		<#elseif item.operator == 'lte'> <= ${item.value}</#if>
+		<#else>
+		<#if item.operator == "eq" > IS NULL <#elseif item.operator == "neq"> IS NOT NULL </#if>
+		</#if>
+	 	</#list></#if>	
+	  	AND ( T1.ISSUE_STATUS != '005' OR T1.ISSUE_STATUS IS NULL )
+		AND (
+			( T1.DUE_DATE IS NULL AND TO_CHAR( T1.CREATION_DATE , 'YYYYMMDD' ) <= '${data.endDate}' )  
+			OR ( T1.DUE_DATE IS NOT NULL AND TO_CHAR( T1.DUE_DATE , 'YYYYMMDD' ) <= '${data.endDate}' ) 
+		)
+		GROUP BY T2.PROJECT_ID, T2.NAME 
+    ]]></dynamic></sql-query>
+        	
+</sqlset>

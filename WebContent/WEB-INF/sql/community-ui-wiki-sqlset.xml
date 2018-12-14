@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlset>
+	<name>COMMUNITY_UI_WIKI</name>
+	<description>COMMUNITY UI WIKI SUBSYSTEM QUERIES</description>	
+	
+	<sql-query name="SELECT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID" description="COUNT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID"><![CDATA[    	
+	SELECT WIKI_ID , VERSION_ID FROM AC_UI_WIKI
+	WHERE OBJECT_TYPE = ? AND OBJECT_ID = ? 
+	]]></sql-query>	
+
+	<sql-query name="COUNT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID" description="COUNT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID"><![CDATA[    	
+ 	SELECT count( WIKI_ID ) FROM AC_UI_WIKI 
+ 	WHERE 
+ 		OBJECT_TYPE = ? 
+ 		AND OBJECT_ID = ?
+    ]]></sql-query>	
+	
+ 	<sql-query name="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_OBJECT_ID" description="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_OBJECT_ID"><![CDATA[    	
+ 	SELECT WIKI_ID FROM AC_UI_WIKI 
+ 	WHERE 
+ 		OBJECT_TYPE = ? 
+ 		AND OBJECT_ID = ?
+ 	ORDER BY MODIFIED_DATE DESC	
+    ]]></sql-query>		
+ 	<sql-query name="COUNT_WIKI_BY_OBJECT_TYPE_AND_STATE" description="COUNT_WIKI_BY_OBJECT_TYPE_AND_STATE"><![CDATA[    	
+ 	SELECT COUNT( T1.WIKI_ID ) FROM AC_UI_WIKI T1, AC_UI_WIKI_VERSION T2
+ 	WHERE 
+	    T1.OBJECT_TYPE = ?
+	    AND T2.STATE = ?
+	    AND T1.WIKI_ID = T2.WIKI_ID 
+	    AND T1.VERSION_ID = T2.VERSION_ID	  	
+    ]]></sql-query>	
+	
+ 	<sql-query name="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_STATE" description="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_STATE"><![CDATA[    	
+  	SELECT T1.WIKI_ID FROM AC_UI_WIKI T1, AC_UI_WIKI_VERSION t2
+ 	WHERE 	    
+	    T1.OBJECT_TYPE = ?
+	    AND T2.STATE = ?
+	    AND T1.PAGE_ID = T2.PAGE_ID 
+	    AND T1.VERSION_ID = T2.VERSION_ID
+ 	ORDER BY T1.MODIFIED_DATE DESC 		
+    ]]></sql-query>		    
+ 
+  	<sql-query name="COUNT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_STATE" description="COUNT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_STATE"><![CDATA[    	
+ 	SELECT count( T1.WIKI_ID ) FROM AC_UI_WIKI T1, AC_UI_WIKI_VERSION t2
+ 	WHERE 
+	    T1.OBJECT_TYPE = ?
+	    AND T1.OBJECT_ID = ?
+	    AND T2.STATE = ?
+	    AND T1.PAGE_ID = T2.PAGE_ID 
+	    AND T1.VERSION_ID = T2.VERSION_ID	  	
+    ]]></sql-query>	
+ 
+  	<sql-query name="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_STATE" description="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_STATE"><![CDATA[    	
+  	SELECT T1.WIKI_ID FROM AC_UI_WIKI T1, AC_UI_WIKI_VERSION t2
+ 	WHERE 	    
+	    t1.object_type = ?
+	    and t2.state = ?
+	    and t1.page_id = t2.page_id 
+	    and t1.version_id = t2.version_id	    
+ 	ORDER BY T1.MODIFIED_DATE DESC 		
+    ]]></sql-query>		
+    
+  	<sql-query name="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_STATE" description="SELECT_WIKI_IDS_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_STATE"><![CDATA[    	
+  	SELECT T1.WIKI_ID FROM AC_UI_WIKI T1, AC_UI_WIKI_VERSION t2
+ 	WHERE 	    
+	    t1.object_type = ?
+	    and t1.object_id = ?
+	    and t2.state = ?
+	    and t1.page_id = t2.page_id 
+	    and t1.version_id = t2.version_id	    
+ 	ORDER BY 	T1.MODIFIED_DATE DESC 		
+    ]]></sql-query>	
+    
+              
+ 	<sql-query name="CREATE_WIKI" description="CREATE_WIKI"><![CDATA[    	
+		INSERT INTO AC_UI_WIKI (
+			WIKI_ID,
+			OBJECT_TYPE,
+			OBJECT_ID,
+			NAME,
+			VERSION_ID,
+			USER_ID, 
+			CREATION_DATE,
+			MODIFIED_DATE
+		) VALUES (
+			?, ?, ?, ?, ?, ?, ?, ? 
+		)
+    ]]></sql-query>	
+ 	<sql-query name="UPDATE_WIKI" description="UPDATE_WIKI"><![CDATA[    	
+		UPDATE AC_UI_WIKI
+		SET 
+			OBJECT_TYPE = ?,
+			OBJECT_ID = ?,
+			NAME = ?,
+			VERSION_ID = ?,
+			USER_ID = ?,
+			MODIFIED_DATE = ?
+		WHERE
+			WIKI_ID = ?
+    ]]></sql-query>	
+ 	<sql-query name="DELETE_WIKI" description="DELETE_WIKI"><![CDATA[    	
+		DELETE FROM AC_UI_WIKI
+		WHERE
+			WIKI_ID = ?
+    ]]></sql-query>	    
+    
+    <sql-query name="SELECT_WIKI_BY_ID_AND_VERSION" description="SELECT_WIKI_BY_IN_AND_VERSION"><![CDATA[    	
+    	SELECT 
+			p.WIKI_ID,
+			p.OBJECT_TYPE,
+			p.OBJECT_ID,
+			p.NAME,
+			p.VERSION_ID,
+			p.USER_ID,
+			p.CREATION_DATE,
+			pv.MODIFIED_DATE,
+			pv.STATE,
+			pv.TITLE,
+			pv.SECURED
+    	FROM 
+    		AC_UI_WIKI p, AC_UI_WIKI_VERSION pv
+    	WHERE
+    		p.WIKI_ID = ?
+    		AND pv.VERSION_ID = ?
+    		AND p.WIKI_ID = pv.WIKI_ID     
+     ]]></sql-query>	       
+ 	<sql-query name="INSERT_WIKI_VERSION" description="INSERT_WIKI_VERSION"><![CDATA[    	
+ 		INSERT INTO AC_UI_WIKI_VERSION (
+			WIKI_ID,
+			VERSION_ID,
+			STATE,
+			TITLE,
+			SECURED,
+			USER_ID,
+			CREATION_DATE,
+			MODIFIED_DATE		
+ 		) VALUES (
+ 			?,?,?,?,?, ?,?,?
+ 		)
+    ]]></sql-query>	
+ 	
+ 	<sql-query name="UPDATE_WIKI_VERSION" description="INSERT_WIKI_VERSION"><![CDATA[    	
+ 		UPDATE  AC_UI_WIKI_VERSION 
+		SET
+			STATE = ?,
+			TITLE = ?,   
+			SECURED = ?,
+			USER_ID = ?,
+			MODIFIED_DATE = ?		
+ 		WHERE
+ 			WIKI_ID = ? AND VERSION_ID = ?
+    ]]></sql-query>	
+
+ 	<sql-query name="UPDATE_WIKI_STATE" description="UPDATE_WIKI_STATE"><![CDATA[    	
+ 		UPDATE AC_UI_WIKI_VERSION 
+		SET
+			USER_ID = ?,
+			CREATION_DATE = ?,
+			MODIFIED_DATE = ?,
+			STATE = ?
+ 		WHERE
+ 			WIKI_ID = ? AND VERSION_ID = ?
+    ]]></sql-query>	
+            
+ 	<sql-query name="DELETE_WIKI_VERSIONS" description="DELETE_WIKI_VERSIONS"><![CDATA[    	
+ 		DELETE FROM AC_UI_WIKI_VERSION 
+ 		WHERE
+ 			WIKI_ID = ?
+    ]]></sql-query>	
+
+ 	<sql-query name="SELECT_WIKI_VERSION_IDS" description="SELECT_WIKI_VERSION_IDS"><![CDATA[    	
+ 		SELECT 
+			VERSION_ID	
+ 		FROM AC_UI_WIKI_VERSION 
+ 		WHERE WIKI_ID = ? 
+ 		ORDER BY VERSION_ID DESC
+    ]]></sql-query>	
+ 	     
+ 	<sql-query name="SELECT_WIKI_VERSIONS" description="SELECT_WIKI_VERSIONS"><![CDATA[    	
+ 		SELECT 
+			WIKI_ID,
+			VERSION_ID,
+			STATE,
+			TITLE,
+			SECURED,
+			USER_ID,
+			CREATION_DATE,
+			MODIFIED_DATE		
+ 		FROM AC_UI_WIKI_VERSION 
+ 		WHERE WIKI_ID = ? 
+ 		ORDER BY VERSION_ID DESC
+    ]]></sql-query>	
+    
+ 	<sql-query name="SELECT_WIKI_PROPERTIES" description="SELECT_WIKI_PROPERTIES"><![CDATA[    	
+ 		SELECT 
+			PROPERTY_NAME,
+			PROPERTY_VALUE 			
+ 		FROM 
+ 			AC_UI_WIKI_PROPERTY 
+  		WHERE 
+ 			WIKI_ID = ? 
+ 			AND 	VERSION_ID = ? 			
+    ]]></sql-query>	   
+    
+ 	<sql-query name="INSERT_WIKI_PROPERTY" description="INSERT_WIKI_PROPERTIES"><![CDATA[    	
+ 		INSERT INTO AC_UI_WIKI_PROPERTY (
+			WIKI_ID,
+			VERSION_ID,
+			PROPERTY_NAME,
+			PROPERTY_VALUE
+ 		) VALUES (
+ 			?,?,?,?
+ 		)
+    ]]></sql-query>	    
+
+ 	<sql-query name="DELETE_WIKI_PROPERTIES" description="DELETE_WIKI_PROPERTY"><![CDATA[    	
+ 		DELETE FROM AC_UI_WIKI_PROPERTY 
+ 		WHERE 
+ 			WIKI_ID = ?
+    ]]></sql-query>	
+    
+ 	<sql-query name="DELETE_WIKI_PROPERTY_BY_NAME" description="DELETE_WIKI_PROPERTY_BY_NAME"><![CDATA[    	
+ 		DELETE FROM AC_UI_WIKI_PROPERTY 
+ 		WHERE 
+ 			WIKI_ID = ? 
+ 			AND 	VERSION_ID = ?
+			AND PROPERTY_NAME = ?
+    ]]></sql-query>	
+
+ 	<sql-query name="UPDATE_WIKI_PROPERTY_BY_NAME" description="UPDATE_WIKI_PROPERTY_BY_NAME"><![CDATA[    	
+ 		UPDATE AC_UI_WIKI_PROPERTY 
+ 		SET  			
+ 			PROPERTY_VALUE = ?
+ 		WHERE 
+ 			WIKI_ID = ? AND
+ 			VERSION_ID = ? AND
+ 			PROPERTY_NAME = ?
+    ]]></sql-query>        
+
+ 	<sql-query name="SELECT_WIKI_ID_BY_NAME" description="SELECT_WIKI_BY_NAME"><![CDATA[    	
+ 		SELECT 
+ 			WIKI_ID
+		FROM AC_UI_WIKI
+ 		WHERE 
+ 			NAME = ?
+    ]]></sql-query>
+    
+ 	<sql-query name="SELECT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_TITLE" description="SELECT_WIKI_BY_OBJECT_TYPE_AND_OBJECT_ID_AND_TITLE"><![CDATA[    	
+ 		SELECT 
+ 			p.WIKI_ID
+			v.VERSION_ID
+		FROM AC_UI_WIKI p , AC_UI_WIKI_VERSION v 		 
+ 		WHERE 
+ 			p.WIKI_ID = v.WIKI_ID
+ 			AND p.OBJECT_TYPE = ?
+ 			AND p.OBJECT_ID = ?
+ 			AND v.STATE = 'published'
+ 			AND v.TITLE = ?
+    ]]></sql-query>
+    
+ 	<sql-query name="SELECT_PUBLISHED_WIKI_VERSION_NUMBER" description="SELECT_PUBLISHED_WIKI_VERSION_NUMBER"><![CDATA[    	
+ 		SELECT VERSION_ID FROM AC_UI_WIKI_VERSION 
+ 		WHERE STATE  = 'published' AND WIKI_ID = ? 
+    ]]></sql-query>	
+    
+ 	<sql-query name="SELECT_MAX_ARCHIVED_WIKI_VERSION_NUMBER" description="SELECT_MAX_ARCHIVED_WIKI_VERSION_NUMBER"><![CDATA[    	
+ 		SELECT max(VERSION_ID) FROM AC_UI_WIKI_VERSION 
+ 		WHERE WIKI_ID = ? AND STATE  = 'archived' 	
+    ]]></sql-query>	
+    
+ 	<sql-query name="SELECT_DRAFT_WIKI_VERSIONS" description="SELECT_DRAFT_WIKI_VERSIONS"><![CDATA[    	
+ 		SELECT VERSION_ID FROM AC_UI_WIKI_VERSION 
+ 		WHERE 
+ 			( STATE = 'incomplete' OR STATE = 'approval' OR  STATE = 'rejected' ) 		
+ 			AND WIKI_ID = ?
+    ]]></sql-query>	   
+ 	
+ 	<sql-query name="SELECT_MAX_WIKI_VERSION_NUMBER" description="SELECT_MAX_WIKI_VERSION_NUMBER"><![CDATA[    	
+ 		SELECT max(VERSION_ID) FROM AC_UI_WIKI_VERSION 
+ 		WHERE WIKI_ID = ?
+    ]]></sql-query>	
+
+ 	<sql-query name="UPDATE_WIKI_STATE_TO_ARCHIVED" description="UPDATE_WIKI_STATE_TO_ARCHIVED"><![CDATA[    	
+ 		UPDATE AC_UI_WIKI_VERSION SET STATE = 'archived' 
+ 		WHERE
+ 			WIKI_ID = ?
+ 			AND STATE = 'published' 
+ 			AND VERSION_ID <> ?
+    ]]></sql-query>	    
+    
+ 	<sql-query name="UPDATE_WIKI_VISION_NUMBER" description="UPDATE_WIKI_VISION_NUMBER"><![CDATA[    	
+ 	UPDATE AC_UI_WIKI SET VERSION_ID = ? 
+ 	WHERE WIKI_ID = ?
+    ]]></sql-query> 
+
+ 	<sql-query name="SELETE_WIKI_BODY_ID" description="SELETE_WIKI_BODY_ID"><![CDATA[    	
+	 	SELECT
+	 		BODY_ID
+	 	FROM AC_UI_WIKI_BODY_VERSION 
+	 	WHERE  WIKI_ID = ? AND VERSION_ID = ?
+    ]]></sql-query>	
+
+ 	<sql-query name="SELETE_WIKI_BODY_IDS" description="SELETE_WIKI_BODY_IDS"><![CDATA[    	
+	 	SELECT
+	 		BODY_ID
+	 	FROM AC_UI_WIKI_BODY_VERSION 
+	 	WHERE  WIKI_ID = ?
+    ]]></sql-query>	
+
+
+ 	<sql-query name="DELETE_WIKI_ALL_BODY_VERSIONS" description="DELETE_WIKI_BODY_VERSIONS"><![CDATA[    	
+	 	DELETE FROM AC_UI_WIKI_BODY_VERSION 
+	 	WHERE  WIKI_ID = ?
+    ]]></sql-query>	  
+            
+ 	<sql-query name="DELETE_WIKI_BODY_VERSION" description="DELETE_WIKI_BODY_VERSION"><![CDATA[    	
+	 	DELETE FROM AC_UI_WIKI_BODY_VERSION 
+	 	WHERE  WIKI_ID = ? AND VERSION_ID = ?
+    ]]></sql-query>	  
+    
+ 	<sql-query name="DELETE_WIKI_VERSION" description="UPDATE_WIKI_VISION_NUMBER"><![CDATA[    	
+	  	DELETE FROM AC_UI_WIKI_VERSION 
+	 	WHERE  WIKI_ID = ? AND VERSION_ID = ?	
+    ]]></sql-query>	        
+    
+ 	<sql-query name="SELECT_WIKI_BODY" description="SELECT_WIKI_BODY"><![CDATA[    	
+ 		SELECT 
+ 			B.BODY_ID,
+			B.WIKI_ID,
+			B.BODY_TEXT 
+		FROM AC_UI_WIKI_BODY B , AC_UI_WIKI_BODY_VERSION BV 		 
+ 		WHERE 
+ 			B.BODY_ID = BV.BODY_ID
+ 			AND BV.WIKI_ID = ? 
+ 			AND BV.VERSION_ID = ?
+    ]]></sql-query>	
+    
+    <sql-query name="UPDATE_WIKI_BODY" description="UPDATE_WIKI_BODY"><![CDATA[    	
+    	UPDATE AC_UI_WIKI_BODY 
+    	SET 
+    		BODY_TEXT = ?
+    	WHERE 
+    		BODY_ID = ?
+    ]]></sql-query>	
+    
+ 	<sql-query name="INSERT_WIKI_BODY" description="INSERT_WIKI_BODY"><![CDATA[    	
+		INSERT INTO AC_UI_WIKI_BODY (
+			BODY_ID,
+			WIKI_ID,
+			BODY_TEXT
+		)VALUES (
+			?, ? , ?
+		)
+    ]]></sql-query>	
+
+ 	<sql-query name="DELETE_WIKI_BODY" description="DELETE_WIKI_BODY"><![CDATA[    	
+	 	DELETE FROM AC_UI_WIKI_BODY 
+	 	WHERE  BODY_ID = ?
+    ]]></sql-query>	  
+        
+ 	<sql-query name="INSERT_WIKI_BODY_VERSION" description="INSERT_WIKI_BODY_VERSION"><![CDATA[    	
+ 		INSERT INTO AC_UI_WIKI_BODY_VERSION (
+			BODY_ID,
+			WIKI_ID,
+			VERSION_ID 		
+ 		) VALUES (
+ 			? , ? , ?
+ 		)
+    ]]></sql-query>
+
+</sqlset>

@@ -1,0 +1,214 @@
+@charset "UTF-8";
+/*------------------------------------
+  Icon Styles
+------------------------------------*/
+i.icon-svg {
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	transform: translate(0, 0);
+	width: 64px;
+	height: 64px;
+}
+.icon-svg-md {
+	width: 48px !important;
+	height: 48px !important;
+}
+.icon-svg-xxs {
+	width: 16px !important;
+	height: 16px !important;
+}
+
+.icon-svg-xs {
+	width: 24px !important;
+	height: 24px !important;
+}
+
+.icon-svg-sm {
+	width: 32px !important;
+	height: 32px !important;
+}
+.icon-svg-lg {
+	width: 128px !important;
+	height: 128px !important;
+}
+.icon-svg-btn {
+	margin: 0 .6rem .6rem 0;
+	color: #9b9b9b;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	border: 2px solid transparent;
+	border-radius: 6px !important;
+	-webkit-transition: 75ms linear all;
+	transition: 75ms linear all;
+}
+
+.icon-svg-btn:hover {
+	background: #f4f4f4;
+	color: #000;
+	text-decoration: none;
+}
+
+.icon-svg-btn:after {
+	clear: both;
+	content: "" !important;
+}
+
+/* IOS Icons */
+.icon-svg-ios-technical-support {
+	background-image: url("/images/icons/ios/technical-support.svg");	
+}
+.icon-svg-ios-project {
+	background-image: url("/images/icons/ios/project.svg");	
+}
+
+.icon-svg-ios-login {
+	background-image: url("/images/icons/ios/login.svg");	
+}
+.icon-svg-ios-logout {
+	background-image: url("/images/icons/ios/logout.svg");	
+}
+.icon-svg-ios-smile {
+	background-image: url("/images/icons/ios/smile.svg");	
+}
+.icon-svg-ios-angry {
+	background-image: url("/images/icons/ios/angry.svg");	
+}
+
+.icon-svg-ios-stats {
+	background-image: url("/images/icons/ios/stats.svg");	
+}
+
+.icon-svg-ios-administrative-tools {
+	background-image: url("/images/icons/ios/administrative-tools.svg");	
+}
+.icon-svg-ios-open-sign {
+	background-image: url("/images/icons/ios/open-sign.svg");
+}
+
+.icon-svg-ios-close-sign {
+	background-image: url("/images/icons/ios/close-sign.svg");
+}
+.icon-svg-ios-back {
+	background-image: url("/images/icons/ios/back.svg");
+}
+
+.icon-svg-ios-call {
+	background-image: url("/images/icons/ios/call.svg");
+}
+
+.icon-svg-ios-close {
+	background-image: url("/images/icons/ios/close.svg");
+}
+.icon-svg-ios-discuss-forum {
+	background-image: url("/images/icons/ios/discuss-forum.svg");
+}
+.icon-svg-ios-close-window {
+	background-image: url("/images/icons/ios/close-window.svg");
+}
+.icon-svg-ios-close-pane {
+	background-image: url("/images/icons/ios/close-pane.svg");
+}
+.icon-svg-ios-trash {
+	background-image: url("/images/icons/ios/trash.svg");
+}
+.icon-svg-ios-send-comment {
+	background-image: url("/images/icons/ios/send-comment.svg");
+}
+.icon-svg-ios-attach {
+	background-image: url("/images/icons/ios/attach.svg");
+}
+.icon-svg-ios-customer-support {
+	background-image: url("/images/icons/ios/customer-support.svg");
+}
+
+/* Dusk Icons */
+.icon-svg-dusk-angry {
+	background-image: url("/images/icons/dusk/angry.svg");	
+}
+
+.icon-svg-dusk-stats {
+	background-image: url("/images/icons/dusk/stats.svg");	
+}
+
+.icon-svg-dusk-warn {
+	background-image: url("/images/icons/dusk/warn.svg");	
+}
+
+.icon-svg-dusk-admin {
+	background-image: url("/images/icons/dusk/admin.svg");	
+}
+
+.icon-svg-dusk-administrative-tools {
+	background-image: url("/images/icons/dusk/administrative-tools.svg");	
+}
+
+.icon-svg-dusk-my-space {
+	background-image: url("/images/icons/dusk/my-space.svg");
+}
+
+.icon-svg-dusk-community-grants {
+	background-image: url("/images/icons/dusk/community-grants.svg");
+}
+
+.icon-svg-dusk-announcement {
+	background-image: url("/images/icons/dusk/announcement.svg");
+}
+
+.icon-svg-dusk-attach {
+	background-image: url("/images/icons/dusk/attach.svg");
+}
+
+.icon-svg-dusk-client-base {
+	background-image: url("/images/icons/dusk/client-base.svg");	
+}
+
+.icon-svg-dusk-back {
+	background-image: url("/images/icons/dusk/back.svg");
+}
+
+.icon-svg-dusk-open-sign {
+	background-image: url("/images/icons/dusk/open-sign.svg");
+}
+
+.icon-svg-dusk-close-sign {
+	background-image: url("/images/icons/dusk/close-sign.svg");
+}
+
+.icon-svg-dusk-edit {
+	background-image: url("/images/icons/dusk/edit.svg");
+}
+.icon-svg-dusk-edit-property {
+	background-image: url("/images/icons/dusk/edit-property.svg");
+}
+.icon-svg-dusk-edit-file {
+	background-image: url("/images/icons/dusk/edit-file.svg");
+}
+.icon-svg-dusk-edit-image {
+	background-image: url("/images/icons/dusk/edit-image.svg");
+}
+.icon-svg-dusk-registration {
+	background-image: url("/images/icons/dusk/registration.svg");
+}
+.icon-svg-dusk-trash {
+	background-image: url("/images/icons/dusk/trash.svg");
+}
+.icon-svg-dusk-upload {
+	background-image: url("/images/icons/dusk/upload.svg");
+}
+.icon-svg-dusk-gallery {
+	background-image: url("/images/icons/dusk/gallery.svg");
+}
+.icon-svg-dusk-download {
+	background-image: url("/images/icons/dusk/download.svg");
+}
+.icon-svg-dusk-desktop-download {
+	background-image: url("/images/icons/dusk/desktop-download.svg");
+}
+.icon-svg-dusk-gallery {
+	background-image: url("/images/icons/dusk/picture.svg");
+}
+.icon-svg-dusk-attach {
+	background-image: url("/images/icons/dusk/attach.svg");
+}

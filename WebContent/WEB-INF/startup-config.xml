@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<startup-config>
+	<setup>
+		<complete>false</complete>
+	</setup>
+	<!--LICENSE SETTING HERE! -->
+	<license />
+	<!--SECURITY SETTING HERE! -->
+	<security>
+		<encrypt>
+			<algorithm>Blowfish</algorithm>
+			<key>
+				<current />
+			</key>
+			<property>
+				<name>username</name>
+				<name>password</name>
+			</property>
+		</encrypt>
+		<authentication>
+			<authority>ROLE_USER</authority>
+			<encoding>
+				<algorithm>SHA-256</algorithm>
+			</encoding>
+		</authentication>
+	</security>
+	<!--SERVICES SETTING HERE ! -->
+	<services>
+		<mail>
+			<enabled>true</enabled>
+		</mail>
+		<config>
+			<persistence>
+				<jdbc>
+					<enabled>true</enabled>
+				</jdbc>
+			</persistence>
+		</config>
+		<sqlquery>
+			<resource>
+				<location>sql</location>
+			</resource>
+		</sqlquery>
+	</services>
+	<!--COMPONENTS SETTING HERE! -->
+	<!--DATABASE SETTING -->
+	<database>
+		<default>
+			<!-- 1. jndi datasource -->
+			<!-- <jndiDataSourceProvider> <jndiName></jndiName> </jndiDataSourceProvider> -->
+			<!-- 
+			<pooledDataSourceProvider>
+				<driverClassName>oracle.jdbc.OracleDriver</driverClassName>
+				<url>jdbc:oracle:thin:@//222.122.47.196:1521/PODODB</url>
+				<username>U_EWHA</username>
+				<password>podoq23$</password>
+				<connectionProperties>
+					<initialSize>1</initialSize>
+					<maxActive>8</maxActive>
+					<maxIdle>8</maxIdle>
+					<maxWait>-1</maxWait>
+					<minIdle>0</minIdle>
+					<testOnBorrow>false</testOnBorrow>
+					<testOnReturn>false</testOnReturn>
+					<testWhileIdle>false</testWhileIdle>
+					<validationQuery>select 1 from dual</validationQuery>
+				</connectionProperties>
+			</pooledDataSourceProvider>
+			-->
+			<pooledDataSourceProvider>
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<url>jdbc:mysql://devmaria.4csoft.com:3306/quiz</url>
+				<username>quizdb</username>
+				<password>quizdb12#</password>
+				<connectionProperties>
+					<initialSize>1</initialSize>
+					<maxActive>8</maxActive>
+					<maxIdle>8</maxIdle>
+					<maxWait>-1</maxWait>
+					<minIdle>0</minIdle>
+					<testOnBorrow>false</testOnBorrow>
+					<testOnReturn>false</testOnReturn>
+					<testWhileIdle>false</testWhileIdle>
+					<validationQuery>select 1</validationQuery>
+				</connectionProperties>
+			</pooledDataSourceProvider>			
+		</default>
+	</database>
+</startup-config>
