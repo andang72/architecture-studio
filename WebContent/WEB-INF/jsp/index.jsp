@@ -23,6 +23,8 @@
 			
 			<% if( __user.isAnonymous() ) { %>
 			<a href="<spring:url value="/accounts/login" htmlEscape="true"/>" >로그인</a>
+			<% } else { %>
+			<a href="<spring:url value="/accounts/logout" htmlEscape="true"/>" >로그아웃</a>
 			<% } %>
 			
 		</div><!--//content-->
