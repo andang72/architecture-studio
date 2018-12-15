@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>podosoftware</groupId>
-	<artifactId>ewha-dashboard</artifactId>
+	<groupId>architecture</groupId>
+	<artifactId>architecture-studio</artifactId>
 	<version>1.0.0-RELEASE</version> 
-	<name>이화여자대학교 대시보드 프로젝트</name> 
+	<name>architecture-studio</name> 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javac.src.version>1.7</javac.src.version>
@@ -411,10 +411,10 @@
 			</properties>
 		</profile>
 	</profiles>
-	<description>이화영자 대학교 대시보드 프로젝트로 학습자, 교수자, 운영자 역할에 따라 페이지가 변경됨.</description>
 	<organization>
 		<name>포도소프트웨어</name>
 		<url>www.podosw.com</url>
 	</organization>
+	<description>다이나믹 서비스 플랫폼.</description>
 </project>  
   
